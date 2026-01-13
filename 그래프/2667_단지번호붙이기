@@ -1,0 +1,46 @@
+import sys
+sys.stdin=open("./input.txt","r")
+input = sys.stdin.readline
+
+from collections import deque
+
+n = int(input()) # 정사각형
+graph = []
+for _ in range(n):
+    graph.append(list(map(int, input().strip())))
+
+visited = [[0]*(n) for _ in range(n)]
+
+# 방향 키 좌, 상, 우, 하
+dx = [-1, 0, 1, 0]
+dy = [0, -1, 0, 1]
+def bfs(x,y):
+    # print(x, y)
+    q = deque([(x,y)])
+    visited[x][y] = 1
+    num = 1
+    while q:
+        ci, cj = q.popleft()
+        for i in range(4):
+            ni, nj = ci+dx[i], cj+dy[i] # 다음 꺼
+            if 0<= ni < n and 0<=nj<n:
+                if graph[ni][nj] == 1 and visited[ni][nj] == 0:
+                    # 방문
+                    visited[ni][nj] = 1
+                    q.append((ni,nj))
+                    num +=1
+    return num
+
+cnt = 0
+num_lst = []
+for i in range(n):
+    for j in range(n):
+        if graph[i][j] == 1 and visited[i][j] == 0:
+            num_lst.append(bfs(i,j))
+            cnt += 1
+            # for k in visited:
+            #     print(k)
+print(cnt)
+num_lst = sorted(num_lst)
+for i in num_lst:
+    print(i)
